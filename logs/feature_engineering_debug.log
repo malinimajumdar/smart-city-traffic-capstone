@@ -1,0 +1,16 @@
+2026-11-16 17:35:07,135 | INFO | __main__ | Dataset before feature engineering: 40575 rows, 11 columns
+2026-11-16 17:35:07,156 | INFO | __main__ | Input schema and datetime validation passed
+2026-11-16 17:35:07,162 | INFO | __main__ | Time features created
+2026-11-16 17:35:07,166 | INFO | __main__ | Hourly cyclical encoding completed
+2026-11-16 17:35:07,195 | INFO | __main__ | Weather encoding completed: 11 binary features
+2026-11-16 17:35:07,213 | INFO | __main__ | Derived weather indicators created
+2026-11-16 17:35:07,213 | DEBUG | __main__ | temp_c scaling: min=-29.7600 max=36.9200
+2026-11-16 17:35:07,214 | INFO | __main__ | Scaled numerical feature: temp_c
+2026-11-16 17:35:07,215 | DEBUG | __main__ | clouds_all scaling: min=0.0000 max=100.0000
+2026-11-16 17:35:07,216 | INFO | __main__ | Scaled numerical feature: clouds_all
+2026-11-16 17:35:07,222 | INFO | __main__ | Weekday encoding and severe-weather indicator completed
+2026-11-16 17:35:07,224 | DEBUG | __main__ | Congestion quartiles: Q1=1249.00, Q2=3427.00, Q3=4952.00
+2026-11-16 17:35:07,227 | INFO | __main__ | Quartile-based congestion target created
+2026-11-16 17:35:08,237 | INFO | __main__ | Dataset after feature engineering: 40575 rows, 36 columns
+2026-11-16 17:35:08,238 | INFO | __main__ | Feature-engineered dataset saved: data/processed/traffic_features.csv
+2026-11-16 17:35:08,238 | INFO | __main__ | Feature engineering completed successfully
