@@ -1,0 +1,32 @@
+2026-11-16 17:35:01,509 | INFO | __main__ | Pipeline execution started
+2026-11-16 17:35:01,589 | INFO | __main__ | Raw CSV loaded successfully: 48204 rows and 9 columns
+2026-11-16 17:35:01,589 | INFO | __main__ | Schema validation successful: all 9 expected columns are present
+2026-11-16 17:35:01,632 | INFO | __main__ | Category validation for weather_main: no changes required
+2026-11-16 17:35:01,685 | WARNING | __main__ | Standardised weather_description in 1730 rows
+2026-11-16 17:35:01,845 | INFO | __main__ | Datetime validation successful: 0 invalid records
+2026-11-16 17:35:01,918 | WARNING | __main__ | Dropped 17 rows: exact duplicate records
+2026-11-16 17:35:01,919 | INFO | __main__ | Dataset after duplicate removal: 48187 rows and 9 columns
+2026-11-16 17:35:01,925 | WARNING | __main__ | Detected 10 invalid or missing values in temp
+2026-11-16 17:35:01,925 | WARNING | __main__ | Detected 1 invalid or missing values in rain_1h
+2026-11-16 17:35:01,926 | INFO | __main__ | Sensor validation for snow_1h: no invalid values
+2026-11-16 17:35:01,926 | INFO | __main__ | Sensor validation for clouds_all: no invalid values
+2026-11-16 17:35:01,926 | WARNING | __main__ | Detected 2 invalid or missing values in traffic_volume
+2026-11-16 17:35:01,938 | WARNING | __main__ | Imputed 10 invalid/missing temp values using monthly medians
+2026-11-16 17:35:01,942 | WARNING | __main__ | Imputed 1 invalid/missing rain_1h values using monthly medians
+2026-11-16 17:35:01,942 | INFO | __main__ | No imputation required for snow_1h
+2026-11-16 17:35:01,943 | INFO | __main__ | No imputation required for clouds_all
+2026-11-16 17:35:01,947 | WARNING | __main__ | Imputed 2 invalid/missing traffic_volume values using monthly medians
+2026-11-16 17:35:01,982 | WARNING | __main__ | Modified 1348 rows: extended holiday flags across observed hours
+2026-11-16 17:35:01,982 | INFO | __main__ | Holiday validation: 61 originally flagged rows; 1409 rows flagged after correction
+2026-11-16 17:35:02,019 | WARNING | __main__ | Dropped 7612 repeated weather-report rows: retained highest-severity weather per timestamp
+2026-11-16 17:35:02,033 | INFO | __main__ | Hourly consolidation completed: 40575 rows, 40575 unique timestamps
+2026-11-16 17:35:02,038 | INFO | __main__ | Temperature conversion completed: created temp_c for 40575 records
+2026-11-16 17:35:02,044 | INFO | __main__ | Final dataset: 40575 rows and 11 columns
+2026-11-16 17:35:02,045 | INFO | __main__ | Remaining duplicate timestamps: 0
+2026-11-16 17:35:02,045 | INFO | __main__ | Missing numeric values: 0
+2026-11-16 17:35:02,045 | INFO | __main__ | Remaining invalid sensor values: 0
+2026-11-16 17:35:02,045 | INFO | __main__ | Corrected holiday hours: 1203
+2026-11-16 17:35:02,045 | INFO | __main__ | Final data quality validation passed
+2026-11-16 17:35:02,401 | INFO | __main__ | Cleaned dataset saved successfully: 40575 rows, 11 columns
+2026-11-16 17:35:02,401 | INFO | __main__ | Output file: data/processed/traffic_clean.csv
+2026-11-16 17:35:02,401 | INFO | __main__ | Pipeline completed successfully
