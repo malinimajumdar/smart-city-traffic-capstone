@@ -1,0 +1,54 @@
+2026-11-16 17:35:32,842 | INFO | __main__ | Command invoked: query | Arguments: {'data': 'data/processed/traffic_features.csv', 'log': 'part2_python/logs/cli_app.log', 'command': 'query', 'datetime': '2017-06-01 08:00'}
+2026-11-16 17:35:33,037 | INFO | __main__ | Command completed successfully: query
+2026-11-16 17:39:52,294 | INFO | __main__ | Command invoked: query | Arguments: {'data': 'data/processed/traffic_features.csv', 'log': 'part2_python/logs/cli_app.log', 'command': 'query', 'datetime': '2017-06-01 08:00'}
+2026-11-16 17:39:52,518 | INFO | __main__ | Command completed successfully: query
+2026-11-16 17:41:00,721 | INFO | __main__ | Command invoked: peak-hours | Arguments: {'data': 'data/processed/traffic_features.csv', 'log': 'part2_python/logs/cli_app.log', 'command': 'peak-hours', 'day_type': 'weekday', 'top': 3}
+2026-11-16 17:41:00,941 | INFO | __main__ | Command completed successfully: peak-hours
+2026-11-16 17:41:01,637 | INFO | __main__ | Command invoked: peak-hours | Arguments: {'data': 'data/processed/traffic_features.csv', 'log': 'part2_python/logs/cli_app.log', 'command': 'peak-hours', 'day_type': 'weekend', 'top': 3}
+2026-11-16 17:41:01,846 | INFO | __main__ | Command completed successfully: peak-hours
+2026-11-16 17:43:34,850 | INFO | __main__ | Command invoked: compare | Arguments: {'data': 'data/processed/traffic_features.csv', 'log': 'part2_python/logs/cli_app.log', 'command': 'compare'}
+2026-11-16 17:43:36,568 | INFO | __main__ | Command completed successfully: compare
+2026-11-16 17:45:17,631 | INFO | __main__ | Command invoked: recommend | Arguments: {'data': 'data/processed/traffic_features.csv', 'log': 'part2_python/logs/cli_app.log', 'command': 'recommend', 'day_type': 'weekday', 'top': 3}
+2026-11-16 17:45:17,997 | INFO | __main__ | Command completed successfully: recommend
+2026-11-16 17:45:18,660 | INFO | __main__ | Command invoked: recommend | Arguments: {'data': 'data/processed/traffic_features.csv', 'log': 'part2_python/logs/cli_app.log', 'command': 'recommend', 'day_type': 'weekend', 'top': 3}
+2026-11-16 17:45:18,883 | INFO | __main__ | Command completed successfully: recommend
+2026-11-16 17:47:15,113 | INFO | __main__ | Command invoked: query | Arguments: {'data': 'data/processed/traffic_features.csv', 'log': 'part2_python/logs/cli_app.log', 'command': 'query', 'datetime': '2017-13-45 08:00'}
+2026-11-16 17:47:15,427 | ERROR | __main__ | Command failed: query | Invalid date. Use YYYY-MM-DD HH:MM, for example 2017-06-01 08:00.
+2026-11-16 18:56:32,209 | INFO | __main__ | Command invoked: query | Arguments: {'data': 'data/processed/traffic_features.csv', 'log': 'part2_python/logs/cli_app.log', 'command': 'query', 'datetime': '2017-06-01 08:00'}
+2026-11-16 18:56:32,429 | INFO | __main__ | Processed dataset loaded successfully: 40575 rows
+2026-11-16 18:56:32,432 | INFO | __main__ | Command completed successfully: query
+2026-11-16 18:57:30,302 | INFO | __main__ | Command invoked: peak-hours | Arguments: {'data': 'data/processed/traffic_features.csv', 'log': 'part2_python/logs/cli_app.log', 'command': 'peak-hours', 'day_type': 'weekday', 'top': 3}
+2026-11-16 18:57:30,525 | INFO | __main__ | Processed dataset loaded successfully: 40575 rows
+2026-11-16 18:57:30,534 | INFO | __main__ | Command completed successfully: peak-hours
+2026-11-16 18:57:31,217 | INFO | __main__ | Command invoked: peak-hours | Arguments: {'data': 'data/processed/traffic_features.csv', 'log': 'part2_python/logs/cli_app.log', 'command': 'peak-hours', 'day_type': 'weekend', 'top': 3}
+2026-11-16 18:57:31,425 | INFO | __main__ | Processed dataset loaded successfully: 40575 rows
+2026-11-16 18:57:31,431 | INFO | __main__ | Command completed successfully: peak-hours
+2026-11-16 18:57:40,056 | INFO | __main__ | Command invoked: compare | Arguments: {'data': 'data/processed/traffic_features.csv', 'log': 'part2_python/logs/cli_app.log', 'command': 'compare'}
+2026-11-16 18:57:40,267 | INFO | __main__ | Processed dataset loaded successfully: 40575 rows
+2026-11-16 18:57:40,269 | INFO | __main__ | Command completed successfully: compare
+2026-11-16 18:57:45,301 | INFO | __main__ | Command invoked: recommend | Arguments: {'data': 'data/processed/traffic_features.csv', 'log': 'part2_python/logs/cli_app.log', 'command': 'recommend', 'day_type': 'weekday', 'top': 3}
+2026-11-16 18:57:45,512 | INFO | __main__ | Processed dataset loaded successfully: 40575 rows
+2026-11-16 18:57:45,521 | INFO | __main__ | Command completed successfully: recommend
+2026-11-16 18:57:46,231 | INFO | __main__ | Command invoked: recommend | Arguments: {'data': 'data/processed/traffic_features.csv', 'log': 'part2_python/logs/cli_app.log', 'command': 'recommend', 'day_type': 'weekend', 'top': 3}
+2026-11-16 18:57:46,441 | INFO | __main__ | Processed dataset loaded successfully: 40575 rows
+2026-11-16 18:57:46,447 | INFO | __main__ | Command completed successfully: recommend
+2026-11-16 18:57:54,359 | INFO | __main__ | Command invoked: query | Arguments: {'data': 'data/processed/traffic_features.csv', 'log': 'part2_python/logs/cli_app.log', 'command': 'query', 'datetime': '2017-13-45 08:00'}
+2026-11-16 18:57:54,567 | INFO | __main__ | Processed dataset loaded successfully: 40575 rows
+2026-11-16 18:57:54,568 | ERROR | __main__ | Command failed: query | Invalid date. Use YYYY-MM-DD HH:MM, for example 2017-06-01 08:00.
+2026-11-16 19:03:34,538 | INFO | __main__ | Command invoked: query | Arguments: {'data': 'missing_traffic_file.csv', 'log': 'part2_python/logs/cli_app.log', 'command': 'query', 'datetime': '2017-06-01 08:00'}
+2026-11-16 19:03:34,541 | ERROR | __main__ | Command failed: query | [Errno 2] No such file or directory: 'missing_traffic_file.csv'
+2026-11-16 19:03:35,240 | INFO | __main__ | Command invoked: query | Arguments: {'data': 'data/processed/traffic_features.csv', 'log': 'part2_python/logs/cli_app.log', 'command': 'query', 'datetime': '2017-06-01 08:01'}
+2026-11-16 19:03:35,446 | INFO | __main__ | Processed dataset loaded successfully: 40575 rows
+2026-11-16 19:03:35,449 | INFO | __main__ | Command completed successfully: query
+2026-11-16 19:03:36,125 | ERROR | __main__ | Invalid CLI arguments: argument command: invalid choice: 'invalid-command' (choose from 'query', 'peak-hours', 'compare', 'recommend')
+2026-11-16 19:03:36,799 | ERROR | __main__ | Invalid CLI arguments: the following arguments are required: --datetime
+2026-11-16 19:22:36,441 | INFO | __main__ | Command invoked: query | Arguments: {'data': 'data/processed/traffic_features.csv', 'log': 'part2_python/logs/cli_app.log', 'command': 'query', 'datetime': '2017-06-01 08:00'}
+2026-11-16 19:22:36,798 | INFO | __main__ | Processed dataset loaded successfully: 40575 rows
+2026-11-16 19:22:36,802 | INFO | __main__ | Command completed successfully: query
+2026-11-16 19:25:46,857 | INFO | __main__ | Command invoked: query | Arguments: {'data': 'missing_traffic_file.csv', 'log': 'part2_python/logs/cli_app.log', 'command': 'query', 'datetime': '2017-06-01 08:00'}
+2026-11-16 19:25:46,859 | ERROR | __main__ | Command failed: query | [Errno 2] No such file or directory: 'missing_traffic_file.csv'
+2026-11-16 19:25:47,564 | INFO | __main__ | Command invoked: query | Arguments: {'data': 'data/processed/traffic_features.csv', 'log': 'part2_python/logs/cli_app.log', 'command': 'query', 'datetime': '2017-06-01 08:01'}
+2026-11-16 19:25:47,777 | INFO | __main__ | Processed dataset loaded successfully: 40575 rows
+2026-11-16 19:25:47,779 | ERROR | __main__ | Command failed: query | No traffic record found for 2017-06-01 08:01. The dataset has historical coverage gaps.
+2026-11-16 19:25:48,488 | ERROR | __main__ | Invalid CLI arguments: argument command: invalid choice: 'invalid-command' (choose from 'query', 'peak-hours', 'compare', 'recommend')
+2026-11-16 19:25:49,195 | ERROR | __main__ | Invalid CLI arguments: the following arguments are required: --datetime
