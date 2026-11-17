@@ -54,12 +54,11 @@ pip install pandas numpy matplotlib
 
 ### Running the Project
 
-Run these commands from the repository root.
+Run the following commands from inside the `capstone_part2` directory. If starting from the main GitHub repository root, first execute `cd capstone_part2`.
 
 **Task 1: Data Cleaning**
 
-Place the original Metro Interstate Traffic Volume CSV
-in the repository root.
+Place the original `Metro_Interstate_Traffic_Volume.csv` file inside the `capstone_part2` directory before running the data cleaning pipeline. The raw dataset is not included in this repository and must be supplied separately.
 
 ```bash
 python pipeline.py --input Metro_Interstate_Traffic_Volume.csv --output data/processed/traffic_clean.csv --log logs/pipeline.log
@@ -89,10 +88,13 @@ The application supports four commands:
 Example:
 
 ```bash
-python cli_app/traffic_cli.py query --datetime "2017-06-01 08:00"
-python cli_app/traffic_cli.py peak-hours
-python cli_app/traffic_cli.py compare
-python cli_app/traffic_cli.py recommend
+python cli_app/traffic_cli.py --data data/processed/traffic_features.csv query --datetime "2017-06-01 08:00"
+
+python cli_app/traffic_cli.py --data data/processed/traffic_features.csv peak-hours
+
+python cli_app/traffic_cli.py --data data/processed/traffic_features.csv compare
+
+python cli_app/traffic_cli.py --data data/processed/traffic_features.csv recommend
 ```
 
 ### Logging Configuration
@@ -148,8 +150,7 @@ a weak positive linear association.
 
 ### Reproducibility and Git Version Control
 
-The project uses Git with separate descriptive commits
-for Tasks 1, 2, 3 and 4.
+The project uses Git with five incremental, descriptively named commits covering Tasks 1–5. These commits are preserved in the integrated GitHub repository, alongside the Part 1 commits and the Part 2 integration commit.
 
 The processing sequence is:
 
