@@ -1,0 +1,24 @@
+2026-11-16 17:35:15,375 | INFO | task3_visualisation | Task 3 dataset loaded: 40575 rows, 36 columns
+2026-11-16 17:35:15,377 | INFO | task3_visualisation | Required columns and numeric values validated
+2026-11-16 17:35:15,378 | INFO | task3_visualisation | Figure output directory: /content/part2_python/figures
+2026-11-16 17:35:15,383 | INFO | task3_visualisation | Task 3 logging file: /content/part2_python/logs/visualisation.log
+2026-11-16 17:35:15,389 | INFO | task3_visualisation | Step 12A: INITIALISATION PASSED
+2026-11-16 17:35:17,234 | INFO | task3_visualisation | Figure successfully saved: /content/part2_python/figures/01_hourly_traffic_demand.png
+2026-11-16 17:35:17,486 | INFO | task3_visualisation | Step 12B: HOURLY TRAFFIC VISUALISATION PASSED
+2026-11-16 17:35:18,272 | INFO | task3_visualisation | Figure successfully saved: /content/part2_python/figures/02_weekday_vs_weekend.png
+2026-11-16 17:35:18,485 | INFO | task3_visualisation | Step 12C: WEEKDAY VS WEEKEND VISUALISATION PASSED
+2026-11-16 17:35:19,190 | INFO | task3_visualisation | Figure successfully saved: /content/part2_python/figures/03_traffic_by_weather.png
+2026-11-16 17:35:19,376 | INFO | task3_visualisation | Step 12D: WEATHER TRAFFIC VISUALISATION PASSED
+2026-11-16 17:35:22,485 | INFO | task3_visualisation | Figure successfully saved: /content/part2_python/figures/04_temperature_vs_traffic.png
+2026-11-16 17:35:23,605 | INFO | task3_visualisation | Step 12E: TEMPERATURE VISUALISATION PASSED
+2026-11-16 17:35:23,619 | INFO | task3_visualisation | Step 12F: ALL FOUR FIGURES AND SAVE LOGS VERIFIED
+2026-11-16 17:35:25,104 | INFO | __main__ | Dataset loaded and validated: 40575 rows, 36 columns
+2026-11-16 17:35:25,233 | INFO | __main__ | Hourly traffic: peak=16:00, lowest=03:00
+2026-11-16 17:35:26,277 | INFO | __main__ | Figure successfully saved: /content/part2_python/figures/01_hourly_traffic_demand.png
+2026-11-16 17:35:26,414 | INFO | __main__ | Average traffic: weekday=3557.44, weekend=2624.49
+2026-11-16 17:35:27,381 | INFO | __main__ | Figure successfully saved: /content/part2_python/figures/02_weekday_vs_weekend.png
+2026-11-16 17:35:27,496 | WARNING | __main__ | Weather categories with fewer than 30 observations: {'Smoke': 20, 'Squall': 1}
+2026-11-16 17:35:28,382 | INFO | __main__ | Figure successfully saved: /content/part2_python/figures/03_traffic_by_weather.png
+2026-11-16 17:35:28,589 | INFO | __main__ | Temperature-traffic Pearson correlation: 0.1396
+2026-11-16 17:35:31,470 | INFO | __main__ | Figure successfully saved: /content/part2_python/figures/04_temperature_vs_traffic.png
+2026-11-16 17:35:31,470 | INFO | __main__ | Task 3 completed: 4 figures generated

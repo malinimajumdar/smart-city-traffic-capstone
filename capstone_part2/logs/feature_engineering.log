@@ -1,0 +1,26 @@
+2026-11-16 17:35:05,273 | INFO | __main__ | Dataset before feature engineering: 40575 rows, 11 columns
+2026-11-16 17:35:05,290 | INFO | __main__ | Input schema and datetime validation passed
+2026-11-16 17:35:05,296 | INFO | __main__ | Time features created
+2026-11-16 17:35:05,299 | INFO | __main__ | Hourly cyclical encoding completed
+2026-11-16 17:35:05,329 | INFO | __main__ | Weather encoding completed: 11 binary features
+2026-11-16 17:35:05,347 | INFO | __main__ | Derived weather indicators created
+2026-11-16 17:35:05,349 | INFO | __main__ | Scaled numerical feature: temp_c
+2026-11-16 17:35:05,350 | INFO | __main__ | Scaled numerical feature: clouds_all
+2026-11-16 17:35:05,356 | INFO | __main__ | Weekday encoding and severe-weather indicator completed
+2026-11-16 17:35:05,360 | INFO | __main__ | Quartile-based congestion target created
+2026-11-16 17:35:06,379 | INFO | __main__ | Dataset after feature engineering: 40575 rows, 36 columns
+2026-11-16 17:35:06,379 | INFO | __main__ | Feature-engineered dataset saved: data/processed/traffic_features.csv
+2026-11-16 17:35:06,379 | INFO | __main__ | Feature engineering completed successfully
+2026-11-16 17:35:09,708 | INFO | __main__ | Dataset before feature engineering: 40575 rows, 11 columns
+2026-11-16 17:35:09,727 | INFO | __main__ | Input schema and datetime validation passed
+2026-11-16 17:35:09,734 | INFO | __main__ | Time features created
+2026-11-16 17:35:09,738 | INFO | __main__ | Hourly cyclical encoding completed
+2026-11-16 17:35:09,768 | INFO | __main__ | Weather encoding completed: 11 binary features
+2026-11-16 17:35:09,786 | INFO | __main__ | Derived weather indicators created
+2026-11-16 17:35:09,787 | INFO | __main__ | Scaled numerical feature: temp_c
+2026-11-16 17:35:09,788 | INFO | __main__ | Scaled numerical feature: clouds_all
+2026-11-16 17:35:09,793 | INFO | __main__ | Weekday encoding and severe-weather indicator completed
+2026-11-16 17:35:09,798 | INFO | __main__ | Quartile-based congestion target created
+2026-11-16 17:35:10,813 | INFO | __main__ | Dataset after feature engineering: 40575 rows, 36 columns
+2026-11-16 17:35:10,813 | INFO | __main__ | Feature-engineered dataset saved: data/processed/traffic_features.csv
+2026-11-16 17:35:10,813 | INFO | __main__ | Feature engineering completed successfully
