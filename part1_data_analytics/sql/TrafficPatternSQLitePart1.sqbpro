@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="TrafficPatternSQLite.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="1428"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="Metro_Interstate_Traffic_Volume" custom_title="0" dock_id="2" table="4,31:mainMetro_Interstate_Traffic_Volume"/><dock_state state="000000ff00000000fd0000000100000002000004010000020bfc0100000002fb000000160064006f0063006b00420072006f00770073006500310100000000000003db0000000000000000fb000000160064006f0063006b00420072006f00770073006500320100000000000004010000015b00ffffff000004010000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="Metro_Interstate_Traffic_Volume" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="101"/><column index="2" value="54"/><column index="3" value="51"/><column index="4" value="59"/><column index="5" value="64"/><column index="6" value="101"/><column index="7" value="257"/><column index="8" value="132"/><column index="9" value="89"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="Part1 Task1">select * from Metro_Interstate_Traffic_Volume;
+
+SELECT COUNT(*) AS total_records
+FROM Metro_Interstate_Traffic_Volume;
+
+SELECT COUNT(*) AS total_columns
+FROM pragma_table_info('Metro_Interstate_Traffic_Volume');
+
+PRAGMA table_info('Metro_Interstate_Traffic_Volume');
+
+--Step 1 – Verify original data
+
+SELECT COUNT(*) AS original_rows,
+       COUNT(DISTINCT date_time) AS unique_hours,
+       COUNT(*) - COUNT(DISTINCT date_time)
+           AS excess_rows
+FROM Metro_Interstate_Traffic_Volume;
+
+--Step 2 – Verify whether traffic volumes differ within the same hour
+
+SELECT date_time,
+       COUNT(*) AS row_count,
+       COUNT(DISTINCT traffic_volume)
+           AS distinct_volumes
+FROM Metro_Interstate_Traffic_Volume
+GROUP BY date_time
+HAVING COUNT(DISTINCT traffic_volume) &gt; 1;
+
+--Step 3 – Create a cleaned table
+
+CREATE TABLE metro_traffic_clean AS
+WITH ranked AS (
+    SELECT *,
+           ROW_NUMBER() OVER (
+               PARTITION BY date_time
+               ORDER BY
+                   CASE weather_main
+                       WHEN 'Thunderstorm' THEN 1
+                       WHEN 'Snow' THEN 2
+                       WHEN 'Rain' THEN 3
+                       WHEN 'Drizzle' THEN 4
+                       WHEN 'Fog' THEN 5
+                       WHEN 'Mist' THEN 6
+                       WHEN 'Haze' THEN 7
+                       WHEN 'Smoke' THEN 8
+                       WHEN 'Squall' THEN 9
+                       WHEN 'Clouds' THEN 10
+                       WHEN 'Clear' THEN 11
+                       ELSE 12
+                   END,
+                   weather_description
+           ) AS rn
+    FROM Metro_Interstate_Traffic_Volume
+)
+SELECT
+    holiday, temp, rain_1h, snow_1h,
+    clouds_all, weather_main,
+    weather_description, date_time,
+    traffic_volume
+FROM ranked
+WHERE rn = 1;
+
+--Step 4 – Verify cleaned dataset
+
+SELECT
+    COUNT(*) AS cleaned_rows,
+    COUNT(DISTINCT date_time) AS unique_hours,
+    COUNT(*) - COUNT(DISTINCT date_time)
+        AS remaining_duplicates
+FROM metro_traffic_clean;
+
+--Step 5 - Analyse annual traffic trends
+
+WITH annual_traffic AS (
+    SELECT
+        SUBSTR(date_time, 7, 4) AS year,
+        COUNT(*) AS recorded_hours,
+        SUM(traffic_volume) AS total_volume,
+        ROUND(AVG(traffic_volume), 2)
+            AS avg_hourly_volume
+    FROM metro_traffic_clean
+    WHERE SUBSTR(date_time, 7, 4)
+          BETWEEN '2012' AND '2017'
+    GROUP BY SUBSTR(date_time, 7, 4)
+),
+comparison AS (
+    SELECT *,
+        LAG(total_volume) OVER (ORDER BY year)
+            AS prev_total,
+        LAG(avg_hourly_volume) OVER (ORDER BY year)
+            AS prev_avg
+    FROM annual_traffic
+)
+SELECT
+    year,
+    recorded_hours,
+    total_volume,
+    avg_hourly_volume,
+    total_volume - prev_total AS yoy_change,
+    ROUND(
+        100.0 * (total_volume - prev_total)
+        / NULLIF(prev_total, 0), 2
+    ) AS yoy_total_pct,
+    ROUND(
+        100.0 * (avg_hourly_volume - prev_avg)
+        / NULLIF(prev_avg, 0), 2
+    ) AS yoy_avg_hourly_pct
+FROM comparison
+ORDER BY year;
+
+
+--Step 6 - Temperature Analysis Around Holidays (2015–2017) 
+
+WITH holiday_dates AS (
+    SELECT '2015' AS year,
+           'New Years Day' AS holiday_name,
+           '01/01/2015' AS holiday_date
+    UNION ALL SELECT '2016', 'New Years Day', '01/01/2016'
+    UNION ALL SELECT '2017', 'New Years Day', '01/01/2017'
+    UNION ALL SELECT '2015', 'Labor Day', '07/09/2015'
+    UNION ALL SELECT '2016', 'Labor Day', '05/09/2016'
+    UNION ALL SELECT '2017', 'Labor Day', '04/09/2017'
+),
+holiday_analysis AS (
+    SELECT
+        h.year,
+        h.holiday_name,
+        COUNT(t.date_time) AS recorded_hours,
+        ROUND(AVG(
+            CASE WHEN t.temp &gt; 0
+                 THEN t.temp - 273.15
+            END
+        ), 2) AS avg_temperature_c,
+        ROUND(AVG(t.traffic_volume), 2)
+            AS avg_hourly_traffic
+    FROM holiday_dates h
+    LEFT JOIN metro_traffic_clean t
+        ON SUBSTR(t.date_time, 1, 10)
+           = h.holiday_date
+    GROUP BY h.year, h.holiday_name
+)
+SELECT
+    year,
+    holiday_name,
+    recorded_hours,
+    avg_temperature_c,
+    avg_hourly_traffic
+FROM holiday_analysis
+ORDER BY holiday_name, year;
+
+--Step 7- Analyse Temperature around holidays inlcuding 2018
+
+WITH holiday_dates AS (
+    SELECT '2016' AS year,
+           'New Years Day' AS holiday_name,
+           '01/01/2016' AS holiday_date
+    UNION ALL SELECT '2017', 'New Years Day', '01/01/2017'
+    UNION ALL SELECT '2018', 'New Years Day', '01/01/2018'
+    UNION ALL SELECT '2016', 'Labor Day', '05/09/2016'
+    UNION ALL SELECT '2017', 'Labor Day', '04/09/2017'
+    UNION ALL SELECT '2018', 'Labor Day', '03/09/2018'
+),
+holiday_analysis AS (
+    SELECT
+        h.year,
+        h.holiday_name,
+        COUNT(t.date_time) AS recorded_hours,
+        ROUND(AVG(
+            CASE
+                WHEN t.temp &gt; 0
+                THEN t.temp - 273.15
+            END
+        ), 2) AS avg_temperature_c,
+        ROUND(AVG(t.traffic_volume), 2)
+            AS avg_hourly_traffic
+    FROM holiday_dates h
+    LEFT JOIN metro_traffic_clean t
+        ON SUBSTR(t.date_time, 1, 10)
+           = h.holiday_date
+    GROUP BY h.year, h.holiday_name
+)
+SELECT
+    year,
+    holiday_name,
+    recorded_hours,
+    avg_temperature_c,
+    avg_hourly_traffic
+FROM holiday_analysis
+ORDER BY holiday_name, year;</sql><sql name="Part1 Task2">SELECT COUNT(*)
+FROM metro_traffic_clean;
+
+--Step I- To find five statistics
+
+WITH RECURSIVE
+ordered_data AS (
+    SELECT
+        traffic_volume,
+        ROW_NUMBER() OVER (
+            ORDER BY traffic_volume
+        ) AS rn,
+        COUNT(*) OVER () AS n
+    FROM metro_traffic_clean
+),
+
+median_calc AS (
+    SELECT
+        AVG(traffic_volume * 1.0) AS median_volume
+    FROM ordered_data
+    WHERE rn IN (
+        (n + 1) / 2,
+        (n + 2) / 2
+    )
+),
+
+stats AS (
+    SELECT
+        COUNT(*) AS total_hours,
+        AVG(traffic_volume) AS mean_volume,
+        AVG(traffic_volume * 1.0 * traffic_volume)
+          - AVG(traffic_volume) * AVG(traffic_volume)
+          AS variance,
+        MIN(traffic_volume) AS min_volume,
+        MAX(traffic_volume) AS max_volume
+    FROM metro_traffic_clean
+	
+),
+
+sqrt_calc(step, estimate) AS (
+    SELECT
+        0,
+        CASE WHEN variance &gt; 0
+             THEN variance
+             ELSE 0.0 END
+    FROM stats
+
+    UNION ALL
+
+    SELECT
+        step + 1,
+        (estimate + variance / estimate) / 2.0
+    FROM sqrt_calc
+    CROSS JOIN stats
+    WHERE step &lt; 30
+      AND estimate &gt; 0
+)
+
+SELECT
+    s.total_hours,
+    ROUND(s.mean_volume, 2) AS mean,
+    ROUND(m.median_volume, 2) AS median,
+    ROUND(q.estimate, 2) AS standard_deviation,
+    ROUND(s.variance, 2) AS variance,
+    s.min_volume AS minimum,
+    s.max_volume AS maximum,
+    s.max_volume - s.min_volume AS range
+
+FROM stats s
+CROSS JOIN median_calc m
+CROSS JOIN sqrt_calc q
+WHERE q.step = (
+    SELECT MAX(step)
+    FROM sqrt_calc
+);
+
+--Step II Correlation Analysis – Temperature and Traffic Volume
+WITH RECURSIVE
+
+-- Step 1: Exclude invalid temperature values
+valid_data AS (
+    SELECT
+        temp - 273.15 AS temperature_c,
+        traffic_volume
+    FROM metro_traffic_clean
+    WHERE temp &gt; 0
+      AND traffic_volume is NOT NULL
+),
+
+-- Step 2: Calculate statistical components
+statistics AS (
+    SELECT
+        COUNT(*) AS total_observations,
+
+        AVG(temperature_c) AS avg_temp,
+        AVG(traffic_volume) AS avg_traffic,
+
+        AVG(temperature_c * traffic_volume)
+            AS avg_xy,
+
+        AVG(temperature_c * temperature_c)
+            AS avg_x2,
+
+        AVG(traffic_volume * 1.0 * traffic_volume)
+            AS avg_y2
+
+    FROM valid_data
+),
+
+-- Step 3: Calculate covariance and variances
+components AS (
+    SELECT
+        total_observations,
+
+        avg_xy - avg_temp * avg_traffic
+            AS covariance,
+
+        avg_x2 - avg_temp * avg_temp
+            AS variance_x,
+
+        avg_y2 - avg_traffic * avg_traffic
+            AS variance_y
+
+    FROM statistics
+),
+
+-- Step 4: Calculate the denominator squared
+denominator AS (
+    SELECT
+        total_observations,
+        covariance,
+        variance_x * variance_y AS denominator_squared
+    FROM components
+),
+
+-- Step 5: Calculate square root using Newton's method
+sqrt_calc(step, estimate) AS (
+    SELECT
+        0,
+        CASE
+            WHEN denominator_squared &gt; 0
+            THEN denominator_squared
+            ELSE 0.0
+        END
+    FROM denominator
+
+    UNION ALL
+
+    SELECT
+        step + 1,
+        (estimate + denominator_squared / estimate) / 2.0
+    FROM sqrt_calc
+    CROSS JOIN denominator
+    WHERE step &lt; 50
+      AND estimate &gt; 0
+),
+
+-- Step 6: Select the final square-root estimate
+final_sqrt AS (
+    SELECT estimate
+    FROM sqrt_calc
+    ORDER BY step DESC
+    LIMIT 1
+)
+
+-- Step 7: Calculate Pearson correlation coefficient
+SELECT
+    d.total_observations,
+    ROUND(
+        d.covariance / NULLIF(f.estimate, 0),
+        4
+    ) AS pearson_correlation
+
+FROM denominator d
+CROSS JOIN final_sqrt f;
+
+
+</sql><sql name="Part1 Task3">-- Task 3.1: Basic Probability Analysis
+
+SELECT
+    COUNT(*) AS total_hours,
+
+    SUM(CASE
+        WHEN traffic_volume &gt; 5500
+        THEN 1 ELSE 0
+    END) AS congestion_hours,
+
+    SUM(CASE
+        WHEN weather_main = 'Clear'
+        THEN 1 ELSE 0
+    END) AS clear_weather_hours,
+
+    SUM(CASE
+        WHEN traffic_volume &gt; 5500
+         AND weather_main = 'Clear'
+        THEN 1 ELSE 0
+    END) AS congestion_and_clear_hours,
+
+    ROUND(AVG(CASE
+        WHEN traffic_volume &gt; 5500
+        THEN 1.0 ELSE 0.0
+    END), 4) AS p_congestion,
+
+    ROUND(AVG(CASE
+        WHEN weather_main = 'Clear'
+        THEN 1.0 ELSE 0.0
+    END), 4) AS p_clear_weather,
+
+    ROUND(AVG(CASE
+        WHEN traffic_volume &gt; 5500
+         AND weather_main = 'Clear'
+        THEN 1.0 ELSE 0.0
+    END), 4) AS p_congestion_and_clear
+
+FROM metro_traffic_clean;
+
+-- Task 3.2: Conditional Probabilities
+
+SELECT
+    SUM(CASE
+        WHEN traffic_volume &gt; 5500
+        THEN 1 ELSE 0
+    END) AS congestion_hours,
+
+    ROUND(
+        1.0 * SUM(CASE
+            WHEN traffic_volume &gt; 5500
+             AND weather_main = 'Clear'
+            THEN 1 ELSE 0
+        END)
+        /
+        NULLIF(SUM(CASE
+            WHEN traffic_volume &gt; 5500
+            THEN 1 ELSE 0
+        END), 0),
+        4
+    ) AS p_clear_given_congestion,
+
+    ROUND(
+        1.0 * SUM(CASE
+            WHEN traffic_volume &gt; 5500
+             AND temp &gt; 292
+            THEN 1 ELSE 0
+        END)
+        /
+        NULLIF(SUM(CASE
+            WHEN traffic_volume &gt; 5500
+            THEN 1 ELSE 0
+        END), 0),
+        4
+    ) AS p_high_temp_given_congestion
+
+FROM metro_traffic_clean;
+
+
+-- Task 3.2: Independence Test
+
+WITH probabilities AS (
+    SELECT
+        AVG(CASE
+            WHEN traffic_volume &gt; 5500
+            THEN 1.0 ELSE 0.0
+        END) AS p_congestion,
+
+        AVG(CASE
+            WHEN weather_main = 'Clear'
+            THEN 1.0 ELSE 0.0
+        END) AS p_clear,
+
+        AVG(CASE
+            WHEN traffic_volume &gt; 5500
+             AND weather_main = 'Clear'
+            THEN 1.0 ELSE 0.0
+        END) AS p_joint
+    FROM metro_traffic_clean
+)
+SELECT
+    ROUND(p_joint, 5)
+        AS observed_joint_probability,
+
+    ROUND(p_congestion * p_clear, 5)
+        AS expected_if_independent,
+
+    ROUND(
+        p_joint - (p_congestion * p_clear),
+        5
+    ) AS difference,
+
+    CASE
+        WHEN ABS(
+            p_joint - p_congestion * p_clear
+        ) &lt; 0.000001
+        THEN 'Independent'
+        ELSE 'Not Independent'
+    END AS independence_result
+
+FROM probabilities;
+
+
+-- Task 3.2: Odds Ratio
+-- Clear Weather vs Cloudy Weather
+
+WITH counts AS (
+    SELECT
+        SUM(CASE
+            WHEN weather_main = 'Clear'
+             AND traffic_volume &gt; 5500
+            THEN 1 ELSE 0
+        END) AS clear_congested,
+
+        SUM(CASE
+            WHEN weather_main = 'Clear'
+             AND traffic_volume &lt;= 5500
+            THEN 1 ELSE 0
+        END) AS clear_not_congested,
+
+        SUM(CASE
+            WHEN weather_main = 'Clouds'
+             AND traffic_volume &gt; 5500
+            THEN 1 ELSE 0
+        END) AS cloudy_congested,
+
+        SUM(CASE
+            WHEN weather_main = 'Clouds'
+             AND traffic_volume &lt;= 5500
+            THEN 1 ELSE 0
+        END) AS cloudy_not_congested
+
+    FROM metro_traffic_clean
+)
+SELECT
+    clear_congested,
+    clear_not_congested,
+    cloudy_congested,
+    cloudy_not_congested,
+
+    ROUND(
+        (1.0 * clear_congested
+         * cloudy_not_congested)
+        /
+        NULLIF(
+            clear_not_congested
+            * cloudy_congested, 0
+        ),
+        4
+    ) AS odds_ratio
+
+FROM counts;
+</sql><current_tab id="1"/></tab_sql></sqlb_project>
